@@ -1,0 +1,316 @@
+<title>Cantonese Word Deck</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+HK:wght@600;800&family=Noto+Sans+HK:wght@400;500;700&family=Outfit:wght@400;500;600&display=swap">
+<style>
+/* Layout: one centred column; a big flip card with tappable example sentences on Practise, a stacked reference list on Word list */
+:root{
+  --bg:#f3f5f2; --surface:#ffffff; --ink:#1c2420; --muted:#5f6c66; --line:#d9e0dc;
+  --jade:#1d7a5f; --jade-soft:#e3f1ec; --red:#b8322a;
+  --han:"Noto Serif HK","Noto Sans HK",serif;
+  --hansans:"Noto Sans HK","PingFang HK","Microsoft JhengHei",sans-serif;
+  --sans:"Outfit","Noto Sans HK",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#151b19; --surface:#1e2724; --ink:#e9efec; --muted:#9aa8a2; --line:#2f3b37;
+  --jade:#5cc7a4; --jade-soft:#1f3a31; --red:#f07a6f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151b19; --surface:#1e2724; --ink:#e9efec; --muted:#9aa8a2; --line:#2f3b37;
+  --jade:#5cc7a4; --jade-soft:#1f3a31; --red:#f07a6f; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5}
+.wrap{max-width:760px;margin:0 auto;padding-block:28px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:22px}
+header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px}
+h1{margin:0;font-size:1.6rem;font-weight:600;text-wrap:balance}
+h1 span{font-family:var(--han);color:var(--red);margin-right:8px}
+.sub{color:var(--muted);font-size:.9rem;margin:2px 0 0}
+.tabs{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px}
+.tabs button{border:0;background:none;font:500 .9rem var(--sans);color:var(--muted);padding:7px 16px;border-radius:999px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--jade);color:var(--surface)}
+button:focus-visible,.card:focus-visible{outline:2px solid var(--jade);outline-offset:2px}
+.notice{background:var(--jade-soft);border-radius:10px;padding:10px 14px;font-size:.88rem;color:var(--ink)}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:14px;padding:28px 20px;text-align:center;color:var(--muted)}
+.empty strong{display:block;color:var(--ink);font-size:1.05rem;margin-bottom:4px}
+/* Practise */
+.stage{display:flex;flex-direction:column;gap:16px;align-items:center}
+.count{font-size:.85rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.card{width:100%;max-width:520px;aspect-ratio:4/3;perspective:1200px;cursor:pointer;border:0;background:none;padding:0}
+.inner{position:relative;width:100%;height:100%;transition:transform .5s cubic-bezier(.3,.7,.3,1);transform-style:preserve-3d}
+.card.flipped .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;box-shadow:0 10px 30px -18px rgba(0,0,0,.35)}
+.face.back{transform:rotateY(180deg)}
+.big{font-family:var(--han);font-weight:800;font-size:clamp(3.2rem,14vw,5.5rem);line-height:1.1;color:var(--ink)}
+.hint{font-size:.8rem;color:var(--muted)}
+.jp{font-size:1.5rem;font-weight:600;color:var(--jade);letter-spacing:.02em}
+.jp sup{font-size:.6em;color:var(--red);margin-left:1px}
+.mean{font-size:1.15rem;color:var(--ink);text-align:center}
+.backhan{font-family:var(--han);font-size:2rem;font-weight:600}
+.controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.btn{border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 .95rem var(--sans);padding:10px 16px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--jade)}
+.btn.primary{background:var(--jade);border-color:var(--jade);color:var(--surface)}
+.btn.on{background:var(--jade-soft);border-color:var(--jade)}
+.btn.sm{padding:6px 12px;font-size:.85rem;border-radius:10px}
+.btn svg{width:18px;height:18px;fill:currentColor}
+/* Example sentences */
+.examples{width:100%;max-width:520px;display:flex;flex-direction:column;gap:8px}
+.exhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.exlabel{font-size:.75rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.extip{font-size:.78rem;color:var(--muted)}
+.ex{display:flex;flex-direction:column;gap:8px;padding:10px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.exrow{display:flex;gap:12px;align-items:flex-start}
+.ex .t{flex:1;min-width:0}
+.zh{font-family:var(--hansans);font-size:1.1rem;line-height:1.6;display:flex;flex-wrap:wrap}
+.tok{font:inherit;color:inherit;background:none;border:0;padding:0 1px;margin:0;cursor:pointer;border-bottom:1px dotted var(--line);border-radius:3px}
+.tok:hover{background:var(--jade-soft);border-bottom-color:var(--jade)}
+.tok.self{color:var(--red);font-weight:700}
+.tok.sel{background:var(--jade);color:var(--surface)}
+.punct{padding:0 1px}
+.ej{color:var(--jade);font-size:.82rem;margin-top:2px}
+.en{color:var(--muted);font-size:.9rem}
+.tokpanel{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--jade-soft);border-radius:10px;padding:8px 10px}
+.tokpanel .w{font-family:var(--hansans);font-weight:700;font-size:1.15rem}
+.tokpanel .msg{font-size:.85rem;color:var(--ink);flex-basis:100%}
+.tokpanel .msg:empty{display:none}
+.examples.locked .ex{filter:blur(6px);user-select:none;pointer-events:none}
+/* List */
+.list{display:flex;flex-direction:column;gap:12px}
+.row{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.rowhead{display:flex;align-items:center;gap:14px}
+.row .h{font-family:var(--han);font-weight:600;font-size:1.7rem;min-width:3.4em}
+.row .t{flex:1;min-width:0}
+.row .j{color:var(--jade);font-weight:600;font-size:.92rem}
+.row .m{color:var(--muted);font-size:.88rem}
+.row .ex{background:var(--bg);border:0;padding:8px 10px}
+.row .zh{font-size:1rem}
+.play{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--jade-soft);color:var(--jade);cursor:pointer;display:grid;place-items:center}
+.play.sm{width:30px;height:30px}
+.play svg{width:15px;height:15px;fill:currentColor}
+.play.speaking{background:var(--jade);color:var(--surface)}
+.row.flash{animation:flash 1.6s ease-out}
+@keyframes flash{from{border-color:var(--jade);box-shadow:0 0 0 3px var(--jade-soft)}to{}}
+@media (prefers-reduced-motion:reduce){.inner{transition:none}.row.flash{animation:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1><span>廣東話</span>Word Deck</h1>
+      <p class="sub"><span id="total">0</span> words · tap any word in an example to add it</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button id="tab-cards" role="tab" aria-selected="true">Practise</button>
+      <button id="tab-list" role="tab" aria-selected="false">Word list</button>
+    </div>
+  </header>
+
+  <div class="notice" id="voiceNote" hidden></div>
+  <div class="notice" id="dbNote" hidden></div>
+
+  <div class="empty" id="emptyState">
+    <strong>Loading your deck…</strong>
+    Your cards appear here. To add one, type <b>aa</b> and a word in chat, like “aa lake”.
+  </div>
+
+  <section id="view-cards" class="stage" hidden>
+    <div class="count" id="count"></div>
+    <button class="card" id="card" aria-label="Flip card">
+      <div class="inner">
+        <div class="face front"><div class="big" id="fHan"></div><div class="hint">Tap to reveal</div></div>
+        <div class="face back"><div class="backhan" id="bHan"></div><div class="jp" id="bJp"></div><div class="mean" id="bMean"></div></div>
+      </div>
+    </button>
+    <div class="controls">
+      <button class="btn" id="prev">← Prev</button>
+      <button class="btn primary" id="say"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>Hear it</button>
+      <button class="btn" id="next">Next →</button>
+    </div>
+    <div class="examples locked" id="cardEx"></div>
+    <div class="controls">
+      <button class="btn" id="shuffle">Shuffle</button>
+      <button class="btn" id="slow" aria-pressed="false">Slow audio</button>
+      <button class="btn" id="enFirst" aria-pressed="false">English first</button>
+    </div>
+  </section>
+
+  <section id="view-list" hidden>
+    <div class="list" id="list"></div>
+  </section>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const jpHTML=s=>esc(s).split(" ").map(sy=>sy.replace(/(\d)$/,"<sup>$1</sup>")).join(" ");
+const isPunct=t=>/^[\p{P}\p{S}\s]+$/u.test(t);
+const icon='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+
+/* deck state: [{id, han, jp, en, ex:[{tok:[...], jp, en}], added}] */
+let CARDS=[], order=[], pos=0, slow=false, enFirst=false, flipped=false, tab="cards";
+let db=null, sample=null;
+
+/* ---------- speech ---------- */
+let voice=null;
+function pickVoice(){
+  if(!("speechSynthesis" in window)) return;
+  const vs=speechSynthesis.getVoices();
+  voice=vs.find(v=>/zh[-_]HK|yue/i.test(v.lang))||vs.find(v=>/cantonese|hong kong/i.test(v.name))||null;
+  const note=$("voiceNote");
+  if(vs.length && !voice){
+    note.hidden=false;
+    note.textContent="No Cantonese voice found on this device, so audio may come out in Mandarin or not at all. On Windows add 'Chinese (Traditional, Hong Kong)' under Settings → Time & language → Speech; on iPhone/Mac add a Cantonese voice under Spoken Content; on Android install Cantonese for Google text-to-speech.";
+  } else note.hidden=true;
+}
+if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+else{ $("voiceNote").hidden=false; $("voiceNote").textContent="This browser doesn't support speech, so audio won't play here. Try Chrome, Edge or Safari."; }
+function speak(text,btn){
+  if(!("speechSynthesis" in window)||!text) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="zh-HK"; if(voice) u.voice=voice; u.rate=slow?0.55:0.9;
+  if(btn){btn.classList.add("speaking");u.onend=u.onerror=()=>btn.classList.remove("speaking");}
+  speechSynthesis.speak(u);
+}
+
+/* ---------- example sentences with tappable words ---------- */
+function exHTML(card,ci){
+  return (card.ex||[]).map((e,k)=>{
+    const toks=(e.tok||[]).map((t,ti)=>isPunct(t)
+      ?`<span class="punct">${esc(t)}</span>`
+      :`<button class="tok${t===card.han?" self":""}" data-c="${ci}" data-e="${k}" data-t="${ti}">${esc(t)}</button>`).join("");
+    return `<div class="ex" data-c="${ci}" data-e="${k}"><div class="exrow"><button class="play sm" data-c="${ci}" data-e="${k}" aria-label="Play example sentence">${icon}</button><div class="t"><div class="zh">${toks}</div><div class="ej">${esc(e.jp)}</div><div class="en">${esc(e.en)}</div></div></div><div class="tokpanel" hidden></div></div>`;
+  }).join("");
+}
+const sentenceText=e=>(e.tok||[]).join("");
+
+function openTokPanel(btn){
+  const exEl=btn.closest(".ex"), panel=exEl.querySelector(".tokpanel");
+  const card=CARDS[+btn.dataset.c], e=card.ex[+btn.dataset.e], word=e.tok[+btn.dataset.t];
+  document.querySelectorAll(".tok.sel").forEach(b=>b.classList.remove("sel"));
+  document.querySelectorAll(".tokpanel").forEach(p=>{if(p!==panel)p.hidden=true;});
+  if(!panel.hidden && panel.dataset.word===word){panel.hidden=true;return;}
+  btn.classList.add("sel");
+  panel.dataset.word=word; panel.hidden=false;
+  const have=CARDS.findIndex(c=>c.han===word);
+  panel.innerHTML=`<span class="w">${esc(word)}</span>
+    <button class="btn sm" data-act="hear">Hear it</button>
+    ${have>=0?`<button class="btn sm" data-act="goto" data-i="${have}">In your deck · show card</button>`
+      :sample?`<button class="btn sm primary" data-act="add">+ Add to deck</button>`:""}
+    <div class="msg">${have<0&&!sample?"Adding from here isn't available in this view. Type “aa "+esc(word)+"” in chat instead.":""}</div>`;
+  panel.querySelector('[data-act="hear"]').onclick=()=>speak(word);
+  const go=panel.querySelector('[data-act="goto"]'); if(go) go.onclick=()=>gotoCard(+go.dataset.i);
+  const add=panel.querySelector('[data-act="add"]'); if(add) add.onclick=()=>addWord(word,sentenceText(e),add,panel.querySelector(".msg"));
+}
+
+/* ---------- add a card by asking Claude ---------- */
+let busy=false;
+async function addWord(word,context,btn,msg){
+  if(busy) return; busy=true; btn.disabled=true; btn.textContent="Making card…"; msg.textContent="";
+  const prompt=`You are making a Cantonese flashcard for an English-speaking learner of Hong Kong Cantonese.
+Word: ${word}
+It appeared in this sentence: ${context}
+
+Reply with only JSON in exactly this shape:
+{"han":"<the word in Traditional Chinese characters>","jp":"<Jyutping with tone numbers, syllables separated by single spaces>","en":"<short English meaning, matching how it is used in the sentence>","ex":[{"tok":["<sentence split into words>","..."],"jp":"<Jyutping of the whole sentence, no punctuation>","en":"<natural English translation>"},{"tok":[...],"jp":"...","en":"..."}]}
+
+Rules: give exactly 2 example sentences in natural spoken Hong Kong Cantonese (use 嘅, 係, 唔, 咗, 喺, 佢 etc., not Mandarin). Each sentence must contain the word as one of its tok items. Split each sentence into words the way a learner would look them up, and put every punctuation mark in its own tok item. Keep sentences short and everyday.`;
+  try{
+    const r=await sample.json(prompt);
+    const ok=r&&typeof r.han==="string"&&typeof r.jp==="string"&&typeof r.en==="string"&&Array.isArray(r.ex)&&r.ex.length&&r.ex.every(x=>Array.isArray(x.tok)&&x.tok.every(t=>typeof t==="string")&&typeof x.jp==="string"&&typeof x.en==="string");
+    if(!ok) throw {code:"bad_shape"};
+    if(CARDS.some(c=>c.han===r.han)){msg.textContent=`${r.han} is already in your deck.`;btn.remove();return;}
+    const card={han:r.han.trim(),jp:r.jp.trim(),en:r.en.trim(),ex:r.ex.slice(0,2).map(x=>({tok:x.tok.map(String),jp:x.jp,en:x.en})),added:Date.now()};
+    await db.collection("cards").add(card);
+    msg.textContent=`Added ${card.han} (${card.jp}) · ${card.en}`;
+    btn.remove();
+  }catch(e){
+    const c=e&&e.code;
+    msg.textContent=c==="not_granted"||c==="sampling_disabled"?"Adding needs your permission for this page to ask Claude. Type “aa "+word+"” in chat instead."
+      :c==="rate_limited"?"Too many requests just now. Try again in a minute."
+      :c==="quota_exceeded"?"Your deck is full."
+      :c==="invalid_argument"?"You can view this deck but not add to it."
+      :"That didn't work. Try again.";
+    btn.disabled=false; btn.textContent="+ Add to deck";
+  }finally{busy=false;}
+}
+
+/* ---------- practise view ---------- */
+function renderCard(){
+  if(!CARDS.length) return;
+  pos=Math.min(pos,order.length-1);
+  const ci=order[pos], c=CARDS[ci];
+  $("card").classList.toggle("flipped",flipped);
+  $("fHan").textContent=enFirst?c.en:c.han;
+  $("fHan").style.fontSize=enFirst?"clamp(1.6rem,6vw,2.4rem)":"";
+  $("fHan").style.fontFamily=enFirst?"var(--sans)":"";
+  $("bHan").textContent=c.han; $("bJp").innerHTML=jpHTML(c.jp); $("bMean").textContent=enFirst?"":c.en;
+  $("count").textContent=`Card ${pos+1} of ${order.length}`;
+  $("cardEx").innerHTML=`<div class="exhead"><span class="exlabel">Examples</span><span class="extip">Tap a word to hear it or add it</span></div>${exHTML(c,ci)}`;
+  $("cardEx").classList.toggle("locked",!flipped);
+}
+function renderList(){
+  $("list").innerHTML=CARDS.map((c,i)=>`<div class="row" id="row-${i}"><div class="rowhead"><div class="h">${esc(c.han)}</div><div class="t"><div class="j">${jpHTML(c.jp)}</div><div class="m">${esc(c.en)}</div></div><button class="play" data-c="${i}" aria-label="Play ${esc(c.han)}">${icon}</button></div>${exHTML(c,i)}</div>`).join("");
+}
+function gotoCard(i){
+  if(tab==="list"){const r=$("row-"+i); if(r){r.scrollIntoView({behavior:"smooth",block:"center"});r.classList.remove("flash");void r.offsetWidth;r.classList.add("flash");} return;}
+  const p=order.indexOf(i); if(p>=0){pos=p;flipped=false;renderCard();window.scrollTo({top:0,behavior:"smooth"});}
+}
+
+$("card").onclick=()=>{flipped=!flipped;$("card").classList.toggle("flipped",flipped);$("cardEx").classList.toggle("locked",!flipped);if(flipped)speak(CARDS[order[pos]].han);};
+$("next").onclick=()=>{pos=(pos+1)%order.length;flipped=false;renderCard();};
+$("prev").onclick=()=>{pos=(pos-1+order.length)%order.length;flipped=false;renderCard();};
+$("say").onclick=()=>speak(CARDS[order[pos]].han,$("say"));
+$("shuffle").onclick=()=>{for(let i=order.length-1;i>0;i--){const k=Math.floor(Math.random()*(i+1));[order[i],order[k]]=[order[k],order[i]];}pos=0;flipped=false;renderCard();};
+$("slow").onclick=e=>{slow=!slow;e.currentTarget.classList.toggle("on",slow);e.currentTarget.setAttribute("aria-pressed",slow);};
+$("enFirst").onclick=e=>{enFirst=!enFirst;e.currentTarget.classList.toggle("on",enFirst);e.currentTarget.setAttribute("aria-pressed",enFirst);flipped=false;renderCard();};
+document.addEventListener("keydown",e=>{
+  if(tab!=="cards"||!CARDS.length||/INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  if(e.key==="ArrowRight") $("next").click();
+  else if(e.key==="ArrowLeft") $("prev").click();
+  else if(e.key===" "&&document.activeElement===document.body){e.preventDefault();$("card").click();}
+});
+
+/* one handler for play buttons and tappable words */
+document.addEventListener("click",e=>{
+  const tok=e.target.closest(".tok"); if(tok){openTokPanel(tok);return;}
+  const b=e.target.closest(".play"); if(!b) return;
+  const c=CARDS[+b.dataset.c]; if(!c) return;
+  speak(b.dataset.e!==undefined?sentenceText(c.ex[+b.dataset.e]):c.han,b);
+});
+
+/* ---------- tabs ---------- */
+function show(which){
+  tab=which;
+  $("tab-cards").setAttribute("aria-selected",which==="cards"); $("tab-list").setAttribute("aria-selected",which==="list");
+  try{localStorage.setItem("tab",which)}catch(_){}
+  if(CARDS.length){$("view-cards").hidden=which!=="cards"; $("view-list").hidden=which!=="list";}
+}
+$("tab-cards").onclick=()=>show("cards"); $("tab-list").onclick=()=>show("list");
+try{tab=localStorage.getItem("tab")||"cards"}catch(_){}
+show(tab);
+
+/* ---------- connect to the saved deck ---------- */
+function setEmpty(title,body){const el=$("emptyState");el.hidden=false;el.innerHTML=`<strong>${title}</strong>${body}`;}
+(async()=>{
+  const c=window.claude;
+  if(!c||!c.use){setEmpty("Your deck can't load here","Open this page in claude.ai or the Claude app while signed in.");return;}
+  [db,sample]=await Promise.all([c.use("db"),c.use("sample")]);
+  if(!db){setEmpty("Your deck can't load here","Open this page in claude.ai or the Claude app while signed in.");return;}
+  db.collection("cards").orderBy("added").onSnapshot(snap=>{
+    const prevLen=CARDS.length;
+    CARDS=snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.han);
+    if(order.length!==CARDS.length){
+      const seen=new Set(order.filter(i=>i<CARDS.length));
+      order=[...seen]; for(let i=0;i<CARDS.length;i++) if(!seen.has(i)) order.push(i);
+    }
+    if(!CARDS.length){setEmpty("Your deck is empty","To add your first card, type <b>aa</b> and a word in chat, like “aa lake”.");$("view-cards").hidden=true;$("view-list").hidden=true;$("total").textContent=0;return;}
+    $("emptyState").hidden=true;
+    $("total").textContent=CARDS.length;
+    $("view-cards").hidden=tab!=="cards"; $("view-list").hidden=tab!=="list";
+    const keepPanels=prevLen===CARDS.length;
+    if(!keepPanels||!$("cardEx").innerHTML) renderCard();
+    renderList();
+  },err=>{setEmpty("Your deck couldn't load","Reload the page to try again.");});
+})();
+</script>
