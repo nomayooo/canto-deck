@@ -109,7 +109,19 @@ button:focus-visible,.card:focus-visible{outline:2px solid var(--jade);outline-o
 .deckbar .lbl{font-size:.75rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
 .deckbar select,.deckbar input{font:600 1rem var(--sans);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:7px 10px;min-width:0;max-width:100%}
 .deckbar select:focus-visible,.deckbar input:focus-visible{outline:2px solid var(--jade);outline-offset:1px}
-.dcount{color:var(--muted);font-size:.88rem;font-variant-numeric:tabular-nums;flex:1;white-space:nowrap}
+.dcount{color:var(--muted);font-size:.88rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.deckbar h2{margin:0;font-size:1.15rem;font-weight:600;flex:1;min-width:0;overflow-wrap:anywhere}
+/* Home: one tile per deck */
+.homehead{font-size:.75rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.decks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.deck-tile{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:16px 18px;cursor:pointer;font:inherit;min-width:0}
+.deck-tile:hover{border-color:var(--jade)}
+.deck-tile:focus-visible{outline:2px solid var(--jade);outline-offset:2px}
+.deck-tile .dname{font-size:1.15rem;font-weight:600;overflow-wrap:anywhere}
+.deck-tile .dmeta{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.deck-tile .dpeek{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.deck-tile .dpeek span{font-family:var(--hansans);font-size:.95rem;background:var(--jade-soft);color:var(--ink);border-radius:8px;padding:2px 8px}
+.deck-tile .dgo{margin-top:6px;font-size:.85rem;font-weight:600;color:var(--jade)}
 </style>
 
 <div class="wrap">
@@ -118,17 +130,22 @@ button:focus-visible,.card:focus-visible{outline:2px solid var(--jade);outline-o
       <h1><span>廣東話</span>Word Deck</h1>
       <p class="sub">Tap any word in an example to hear it or add it</p>
     </div>
-    <div class="tabs" role="tablist">
+    <div class="tabs" role="tablist" id="tabs" hidden>
       <button id="tab-cards" role="tab" aria-selected="true">Practise</button>
       <button id="tab-list" role="tab" aria-selected="false">Word list</button>
     </div>
   </header>
 
-  <div class="deckbar">
-    <label class="lbl" for="deckSel">Deck</label>
-    <select id="deckSel" aria-label="Choose a deck"><option>Loading…</option></select>
+  <div class="deckbar" id="deckBar" hidden>
+    <button class="btn sm" id="backHome" type="button">← All decks</button>
+    <h2 id="deckTitle"></h2>
     <span class="dcount"><span id="total">0</span> words</span>
   </div>
+
+  <section id="view-home" hidden>
+    <div class="homehead">Your decks</div>
+    <div class="decks" id="homeList" style="margin-top:10px"></div>
+  </section>
 
   <div class="themes" role="radiogroup" aria-label="Colour theme">
     <span class="lbl">Theme</span>
@@ -182,7 +199,7 @@ const isPunct=t=>/^[\p{P}\p{S}\s]+$/u.test(t);
 const icon='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 
 /* deck state: [{id, han, jp, en, ex:[{tok:[...], jp, en}], added}] */
-let CARDS=[], order=[], pos=0, slow=false, enFirst=false, flipped=false, tab="cards";
+let CARDS=[], order=[], pos=0, slow=false, enFirst=false, flipped=false, tab="cards", screen="home";
 let db=null, sample=null;
 
 /* ---------- speech ---------- */
@@ -301,7 +318,7 @@ $("shuffle").onclick=()=>{for(let i=order.length-1;i>0;i--){const k=Math.floor(M
 $("slow").onclick=e=>{slow=!slow;e.currentTarget.classList.toggle("on",slow);e.currentTarget.setAttribute("aria-pressed",slow);};
 $("enFirst").onclick=e=>{enFirst=!enFirst;e.currentTarget.classList.toggle("on",enFirst);e.currentTarget.setAttribute("aria-pressed",enFirst);flipped=false;renderCard();};
 document.addEventListener("keydown",e=>{
-  if(tab!=="cards"||!CARDS.length||/INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  if(screen!=="deck"||tab!=="cards"||!CARDS.length||/INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
   if(e.key==="ArrowRight") $("next").click();
   else if(e.key==="ArrowLeft") $("prev").click();
   else if(e.key===" "&&document.activeElement===document.body){e.preventDefault();$("card").click();}
@@ -320,7 +337,7 @@ function show(which){
   tab=which;
   $("tab-cards").setAttribute("aria-selected",which==="cards"); $("tab-list").setAttribute("aria-selected",which==="list");
   try{localStorage.setItem("tab",which)}catch(_){}
-  if(CARDS.length){$("view-cards").hidden=which!=="cards"; $("view-list").hidden=which!=="list";}
+  if(screen==="deck"&&CARDS.length){$("view-cards").hidden=which!=="cards"; $("view-list").hidden=which!=="list";}
 }
 $("tab-cards").onclick=()=>show("cards"); $("tab-list").onclick=()=>show("list");
 try{tab=localStorage.getItem("tab")||"cards"}catch(_){}
@@ -345,22 +362,36 @@ const deckName=id=>(DECKS.find(d=>d.id===id)||{}).name||"your deck";
 const deckOf=c=>c.deck||(DECKS[0]&&DECKS[0].id)||null;
 function setEmpty(title,body){const el=$("emptyState");el.hidden=false;el.innerHTML=`<strong>${title}</strong>${body}`;}
 
-function renderDeckSel(){
-  const sel=$("deckSel");
-  sel.innerHTML=DECKS.length
-    ?DECKS.map(d=>`<option value="${esc(d.id)}">${esc(d.name)} (${ALL.filter(c=>deckOf(c)===d.id).length})</option>`).join("")
-    :`<option value="">All words</option>`;
-  if(activeDeck) sel.value=activeDeck;
+function renderHome(){
+  $("homeList").innerHTML=DECKS.map(d=>{
+    const cs=ALL.filter(c=>deckOf(c)===d.id);
+    return `<button class="deck-tile" type="button" data-deck="${esc(d.id)}"><span class="dname">${esc(d.name)}</span><span class="dmeta">${cs.length} word${cs.length===1?"":"s"}</span>${cs.length?`<span class="dpeek">${cs.slice(0,6).map(c=>`<span>${esc(c.han)}</span>`).join("")}</span>`:""}<span class="dgo">Open deck →</span></button>`;
+  }).join("");
 }
+function showHome(){
+  screen="home";
+  $("deckBar").hidden=true; $("tabs").hidden=true;
+  $("view-cards").hidden=true; $("view-list").hidden=true;
+  if(DECKS.length){$("emptyState").hidden=true; $("view-home").hidden=false;}
+  else{$("view-home").hidden=true; setEmpty("No decks yet","Ask Claude in chat to create your first deck.");}
+}
+function openDeck(id){
+  activeDeck=id; screen="deck";
+  try{localStorage.setItem("deck",id)}catch(_){}
+  if(db) db.doc("meta/settings").set({activeDeck:id}).catch(()=>{});
+  applyView(true); window.scrollTo({top:0});
+}
+$("homeList").onclick=e=>{const t=e.target.closest(".deck-tile"); if(t) openDeck(t.dataset.deck);};
+$("backHome").onclick=()=>{showHome(); window.scrollTo({top:0});};
 
 function applyView(reset){
   if(!gotCards||!gotDecks) return;
-  if(DECKS.length&&!DECKS.some(d=>d.id===activeDeck)){
-    activeDeck=(DECKS.find(d=>d.id===settingsDeck)||DECKS[0]).id; reset=true;
-  }
-  renderDeckSel();
+  renderHome();
+  if(screen!=="deck"||!DECKS.some(d=>d.id===activeDeck)){showHome();return;}
+  $("view-home").hidden=true; $("deckBar").hidden=false; $("tabs").hidden=false;
+  $("deckTitle").textContent=deckName(activeDeck);
   const prevLen=CARDS.length;
-  CARDS=DECKS.length?ALL.filter(c=>deckOf(c)===activeDeck):ALL.slice();
+  CARDS=ALL.filter(c=>deckOf(c)===activeDeck);
   if(reset){order=CARDS.map((_,i)=>i);pos=0;flipped=false;}
   else if(order.length!==CARDS.length){
     const seen=new Set(order.filter(i=>i<CARDS.length));
@@ -368,7 +399,7 @@ function applyView(reset){
   }
   $("total").textContent=CARDS.length;
   if(!CARDS.length){
-    setEmpty("This deck is empty","Type <b>aa</b> and a word in chat to add one, or switch decks and tap a word in an example.");
+    setEmpty("This deck is empty","Type <b>aa</b> and a word in chat to add one, or open another deck and tap a word in an example.");
     $("view-cards").hidden=true;$("view-list").hidden=true;$("cardEx").innerHTML="";return;
   }
   $("emptyState").hidden=true;
@@ -377,12 +408,6 @@ function applyView(reset){
   renderList();
 }
 
-$("deckSel").onchange=e=>{
-  activeDeck=e.target.value||null;
-  try{localStorage.setItem("deck",activeDeck||"")}catch(_){}
-  if(db&&activeDeck) db.doc("meta/settings").set({activeDeck}).catch(()=>{});
-  applyView(true);
-};
 
 /* ---------- connect to the saved decks ---------- */
 (async()=>{
@@ -401,7 +426,7 @@ $("deckSel").onchange=e=>{
   },fail);
   db.doc("meta/settings").onSnapshot(s=>{
     settingsDeck=s.exists?(s.data()||{}).activeDeck||null:null;
-    if(!activeDeck&&settingsDeck){activeDeck=settingsDeck;applyView(true);}
+    if(!activeDeck&&settingsDeck) activeDeck=settingsDeck;
   },()=>{});
 })();
 </script>
