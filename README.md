@@ -5,12 +5,14 @@ A Cantonese flashcard deck: flip-card practice and a word list, with Jyutping, t
 ## Files
 
 - `index.html` – the deck page. It runs as a Claude artifact on claude.ai, where it loads cards from the artifact's database and can add new cards by asking Claude.
-- `cards.json` – a backup of every card in the deck (characters, Jyutping, meaning, examples).
+- `cards.json` – a backup of every card (deck, characters, Jyutping, meaning, examples).
+- `decks.json` – the list of decks. Each card's `deck` field is one of these ids.
 
 ## Card format
 
 ```json
 {
+  "deck": "test",
   "han": "湖",
   "jp": "wu4",
   "en": "lake",

@@ -1,44 +1,44 @@
 [
-  {"han":"小食檔","jp":"siu2 sik6 dong3","en":"snack stall","ex":[
+  {"deck":"test","han":"小食檔","jp":"siu2 sik6 dong3","en":"snack stall","ex":[
     {"tok":["呢個","小食檔","嘅","魚蛋","好","好食","。"],"jp":"ni1 go3 siu2 sik6 dong3 ge3 jyu4 daan2 hou2 hou2 sik6","en":"This snack stall's fish balls are really tasty."},
     {"tok":["街口","有","好多","小食檔","。"],"jp":"gaai1 hau2 jau5 hou2 do1 siu2 sik6 dong3","en":"There are lots of snack stalls at the end of the street."}]},
-  {"han":"優點","jp":"jau1 dim2","en":"advantage, strength","ex":[
+  {"deck":"test","han":"優點","jp":"jau1 dim2","en":"advantage, strength","ex":[
     {"tok":["佢","最大","嘅","優點","係","有","耐性","。"],"jp":"keoi5 zeoi3 daai6 ge3 jau1 dim2 hai6 jau5 noi6 sing3","en":"Their biggest strength is being patient."},
     {"tok":["呢部","手機","有","咩","優點","？"],"jp":"ni1 bou6 sau2 gei1 jau5 me1 jau1 dim2","en":"What are the advantages of this phone?"}]},
-  {"han":"缺點","jp":"kyut3 dim2","en":"disadvantage, weakness","ex":[
+  {"deck":"test","han":"缺點","jp":"kyut3 dim2","en":"disadvantage, weakness","ex":[
     {"tok":["每個人","都","有","缺點","。"],"jp":"mui5 go3 jan4 dou1 jau5 kyut3 dim2","en":"Everyone has their weaknesses."},
     {"tok":["呢間","屋","嘅","缺點","係","太","細","。"],"jp":"ni1 gaan1 uk1 ge3 kyut3 dim2 hai6 taai3 sai3","en":"The downside of this flat is that it's too small."}]},
-  {"han":"相反","jp":"soeng1 faan2","en":"opposite, contrary","ex":[
+  {"deck":"test","han":"相反","jp":"soeng1 faan2","en":"opposite, contrary","ex":[
     {"tok":["「","大","」","嘅","相反","係","「","細","」","。"],"jp":"daai6 ge3 soeng1 faan2 hai6 sai3","en":"The opposite of \"big\" is \"small\"."},
     {"tok":["佢","唔係","唔","鍾意","你","，","相反","，","佢","好","欣賞","你","。"],"jp":"keoi5 m4 hai6 m4 zung1 ji3 nei5, soeng1 faan2, keoi5 hou2 jan1 soeng2 nei5","en":"He doesn't dislike you. On the contrary, he really admires you."}]},
-  {"han":"有邏輯","jp":"jau5 lo4 zap1","en":"logical","ex":[
+  {"deck":"test","han":"有邏輯","jp":"jau5 lo4 zap1","en":"logical","ex":[
     {"tok":["你","講嘢","好","有邏輯","。"],"jp":"nei5 gong2 je5 hou2 jau5 lo4 zap1","en":"You speak very logically."},
     {"tok":["佢","寫","嘅","文章","好","有邏輯","。"],"jp":"keoi5 se2 ge3 man4 zoeng1 hou2 jau5 lo4 zap1","en":"The essays she writes are very logical."}]},
-  {"han":"唔包容","jp":"m4 baau1 jung4","en":"intolerant, not accepting","ex":[
+  {"deck":"test","han":"唔包容","jp":"m4 baau1 jung4","en":"intolerant, not accepting","ex":[
     {"tok":["佢","對","唔同","意見","好","唔包容","。"],"jp":"keoi5 deoi3 m4 tung4 ji3 gin3 hou2 m4 baau1 jung4","en":"He's very intolerant of other opinions."},
     {"tok":["一個","唔包容","嘅","社會","好難","進步","。"],"jp":"jat1 go3 m4 baau1 jung4 ge3 se5 wui2 hou2 naan4 zeon3 bou6","en":"An intolerant society finds it hard to progress."}]},
-  {"han":"抱負","jp":"pou5 fu6","en":"ambition, aspiration","ex":[
+  {"deck":"test","han":"抱負","jp":"pou5 fu6","en":"ambition, aspiration","ex":[
     {"tok":["佢","係","一個","好","有","抱負","嘅","後生仔","。"],"jp":"keoi5 hai6 jat1 go3 hou2 jau5 pou5 fu6 ge3 hau6 saang1 zai2","en":"He's a very ambitious young man."},
     {"tok":["你","將來","有","咩","抱負","？"],"jp":"nei5 zoeng1 loi4 jau5 me1 pou5 fu6","en":"What are your ambitions for the future?"}]},
-  {"han":"推薦","jp":"teoi1 zin3","en":"to recommend","ex":[
+  {"deck":"test","han":"推薦","jp":"teoi1 zin3","en":"to recommend","ex":[
     {"tok":["你","可唔可以","推薦","一間","好","嘅","餐廳","？"],"jp":"nei5 ho2 m4 ho2 ji5 teoi1 zin3 jat1 gaan1 hou2 ge3 caan1 teng1","en":"Could you recommend a good restaurant?"},
     {"tok":["我","推薦","你","試吓","呢本","書","。"],"jp":"ngo5 teoi1 zin3 nei5 si3 haa5 ni1 bun2 syu1","en":"I recommend you give this book a try."}]},
-  {"han":"增值","jp":"zang1 zik6","en":"to add value, appreciate","ex":[
+  {"deck":"test","han":"增值","jp":"zang1 zik6","en":"to add value, appreciate","ex":[
     {"tok":["讀","多","個","課程","可以","幫","自己","增值","。"],"jp":"duk6 do1 go3 fo3 cing4 ho2 ji5 bong1 zi6 gei2 zang1 zik6","en":"Taking another course can help you upskill."},
     {"tok":["呢層","樓","過去","十年","增值","咗","好多","。"],"jp":"ni1 cang4 lau2 gwo3 heoi3 sap6 nin4 zang1 zik6 zo2 hou2 do1","en":"This flat has gone up in value a lot over the past ten years."}]},
-  {"han":"只係","jp":"zi2 hai6","en":"only, just","ex":[
+  {"deck":"test","han":"只係","jp":"zi2 hai6","en":"only, just","ex":[
     {"tok":["我","只係","想","休息","吓","。"],"jp":"ngo5 zi2 hai6 soeng2 jau1 sik1 haa5","en":"I just want to rest for a bit."},
     {"tok":["唔使","驚","，","只係","一個","夢","。"],"jp":"m4 sai2 geng1, zi2 hai6 jat1 go3 mung6","en":"Don't be scared, it's only a dream."}]},
-  {"han":"需求","jp":"seoi1 kau4","en":"demand","ex":[
+  {"deck":"test","han":"需求","jp":"seoi1 kau4","en":"demand","ex":[
     {"tok":["而家","電動車","嘅","需求","越嚟越","大","。"],"jp":"ji4 gaa1 din6 dung6 ce1 ge3 seoi1 kau4 jyut6 lai4 jyut6 daai6","en":"Demand for electric cars keeps growing."},
     {"tok":["我哋","要","了解","客人","嘅","需求","。"],"jp":"ngo5 dei6 jiu3 liu5 gaai2 haak3 jan4 ge3 seoi1 kau4","en":"We need to understand what our customers need."}]},
-  {"han":"湖","jp":"wu4","en":"lake","ex":[
+  {"deck":"test","han":"湖","jp":"wu4","en":"lake","ex":[
     {"tok":["公園","入面","有","個","好","靚","嘅","湖","。"],"jp":"gung1 jyun2 jap6 min6 jau5 go3 hou2 leng3 ge3 wu4","en":"There's a beautiful lake in the park."},
     {"tok":["我哋","喺","湖邊","散步","。"],"jp":"ngo5 dei6 hai2 wu4 bin1 saan3 bou6","en":"We're taking a walk by the lake."}]},
-  {"han":"正式","jp":"zing3 sik1","en":"formal","ex":[
+  {"deck":"test","han":"正式","jp":"zing3 sik1","en":"formal","ex":[
     {"tok":["呢個","場合","要","着","得","正式","啲","。"],"jp":"ni1 go3 coeng4 hap6 jiu3 zoek3 dak1 zing3 sik1 di1","en":"You need to dress more formally for this occasion."},
     {"tok":["佢","下個月","正式","開始","返工","。"],"jp":"keoi5 haa6 go3 jyut6 zing3 sik1 hoi1 ci2 faan1 gung1","en":"He officially starts work next month."}]},
-  {"han":"耐性","jp":"noi6 sing3","en":"patience","ex":[
+  {"deck":"test","han":"耐性","jp":"noi6 sing3","en":"patience","ex":[
     {"tok":["佢","最","大","嘅","優點","係","有","耐性","。"],"jp":"keoi5 zeoi3 daai6 ge3 jau1 dim2 hai6 jau5 noi6 sing3","en":"His biggest strength is that he has patience."},
     {"tok":["教","細路","要","好","有","耐性","。"],"jp":"gaau3 sai3 lou6 jiu3 hou2 jau5 noi6 sing3","en":"Teaching kids takes a lot of patience."}]}
 ]
