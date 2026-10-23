@@ -110,10 +110,6 @@ button:focus-visible,.card:focus-visible{outline:2px solid var(--jade);outline-o
 .deckbar select,.deckbar input{font:600 1rem var(--sans);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:7px 10px;min-width:0;max-width:100%}
 .deckbar select:focus-visible,.deckbar input:focus-visible{outline:2px solid var(--jade);outline-offset:1px}
 .dcount{color:var(--muted);font-size:.88rem;font-variant-numeric:tabular-nums;flex:1;white-space:nowrap}
-#newDeckForm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex-basis:100%}
-#newDeckForm[hidden]{display:none}
-#deckMsg{font-size:.85rem;color:var(--red);flex-basis:100%}
-#deckMsg:empty{display:none}
 </style>
 
 <div class="wrap">
@@ -132,13 +128,6 @@ button:focus-visible,.card:focus-visible{outline:2px solid var(--jade);outline-o
     <label class="lbl" for="deckSel">Deck</label>
     <select id="deckSel" aria-label="Choose a deck"><option>Loading…</option></select>
     <span class="dcount"><span id="total">0</span> words</span>
-    <button class="btn sm" id="newDeckBtn" type="button">+ New deck</button>
-    <form id="newDeckForm" hidden>
-      <input id="newDeckName" placeholder="Food words" maxlength="40" aria-label="New deck name">
-      <button class="btn sm primary" type="submit">Create deck</button>
-      <button class="btn sm" type="button" id="newDeckCancel">Cancel</button>
-    </form>
-    <div id="deckMsg"></div>
   </div>
 
   <div class="themes" role="radiogroup" aria-label="Colour theme">
@@ -393,26 +382,6 @@ $("deckSel").onchange=e=>{
   try{localStorage.setItem("deck",activeDeck||"")}catch(_){}
   if(db&&activeDeck) db.doc("meta/settings").set({activeDeck}).catch(()=>{});
   applyView(true);
-};
-$("newDeckBtn").onclick=()=>{$("newDeckForm").hidden=false;$("newDeckBtn").hidden=true;$("deckMsg").textContent="";$("newDeckName").focus();};
-$("newDeckCancel").onclick=()=>{$("newDeckForm").hidden=true;$("newDeckBtn").hidden=false;$("newDeckName").value="";$("deckMsg").textContent="";};
-$("newDeckName").oninput=()=>{$("deckMsg").textContent="";};
-$("newDeckForm").onsubmit=async e=>{
-  e.preventDefault();
-  const name=$("newDeckName").value.trim();
-  if(!name){$("deckMsg").textContent="Enter a name for the deck.";return;}
-  if(DECKS.some(d=>d.name.toLowerCase()===name.toLowerCase())){$("deckMsg").textContent=`You already have a deck called ${name}.`;return;}
-  if(!db){$("deckMsg").textContent="Decks can't be created in this view.";return;}
-  const id="d"+Date.now().toString(36);
-  try{
-    await db.collection("decks").doc(id).set({name,added:Date.now()});
-    activeDeck=id;
-    try{localStorage.setItem("deck",id)}catch(_){}
-    db.doc("meta/settings").set({activeDeck:id}).catch(()=>{});
-    $("newDeckCancel").click();
-  }catch(err){
-    $("deckMsg").textContent=err&&err.code==="invalid_argument"?"You can view these decks but not create new ones.":"That didn't work. Try again.";
-  }
 };
 
 /* ---------- connect to the saved decks ---------- */
