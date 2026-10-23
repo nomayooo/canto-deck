@@ -16,7 +16,20 @@
 :root[data-theme="dark"]{
   --bg:#151b19; --surface:#1e2724; --ink:#e9efec; --muted:#9aa8a2; --line:#2f3b37;
   --jade:#5cc7a4; --jade-soft:#1f3a31; --red:#f07a6f; color-scheme:dark}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5}
+/* Snack-shelf themes: chosen by the viewer, each a fixed palette that overrides light/dark */
+body[data-brand="lemontea"]{--bg:#fff4cc;--surface:#fffcf0;--ink:#3a2410;--muted:#7a5b32;--line:#ebd59a;--jade:#a8561a;--jade-soft:#fbe6a8;--red:#2e7d32;color-scheme:light}
+body[data-brand="rabbit"]{--bg:#eef3fb;--surface:#ffffff;--ink:#10224a;--muted:#4a5c82;--line:#cfdaed;--jade:#1e4fa3;--jade-soft:#e0e9f8;--red:#d7262b;color-scheme:light}
+body[data-brand="soymalt"]{--bg:#f1e2cc;--surface:#fff8ee;--ink:#3b2414;--muted:#7a5a42;--line:#dfc7a6;--jade:#7a4a2a;--jade-soft:#ecd6ba;--red:#b5802a;color-scheme:light}
+body[data-brand="vitasoy"]{--bg:#f5f0de;--surface:#fffdf5;--ink:#1f3520;--muted:#5b6b52;--line:#dbd5b8;--jade:#2e7d4f;--jade-soft:#e0eddb;--red:#b8901c;color-scheme:light}
+body[data-brand="spicy"]{--bg:#2a0b0b;--surface:#3b1311;--ink:#fff1e0;--muted:#e8b9a0;--line:#5e2420;--jade:#ff9f1c;--jade-soft:#4c1c14;--red:#ff5a45;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;transition:background-color .3s}
+.themes{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.themes .lbl{font-size:.75rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-right:2px}
+.sw{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 .82rem var(--sans);padding:5px 12px 5px 5px;border-radius:999px;cursor:pointer}
+.sw i{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--a) 50%,var(--b) 50%);box-shadow:inset 0 0 0 1px rgba(0,0,0,.15);flex:none}
+.sw[aria-checked="true"]{border-color:var(--jade);box-shadow:0 0 0 2px var(--jade-soft)}
+.sw:focus-visible{outline:2px solid var(--jade);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){body{transition:none}}
 .wrap{max-width:760px;margin:0 auto;padding-block:28px 48px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
   display:flex;flex-direction:column;gap:22px}
@@ -104,6 +117,16 @@ button:focus-visible,.card:focus-visible{outline:2px solid var(--jade);outline-o
       <button id="tab-list" role="tab" aria-selected="false">Word list</button>
     </div>
   </header>
+
+  <div class="themes" role="radiogroup" aria-label="Colour theme">
+    <span class="lbl">Theme</span>
+    <button class="sw" role="radio" data-brand="jade" style="--a:#1d7a5f;--b:#e3f1ec"><i></i>Jade</button>
+    <button class="sw" role="radio" data-brand="lemontea" style="--a:#f4c21b;--b:#a8561a"><i></i>Vita Lemon Tea</button>
+    <button class="sw" role="radio" data-brand="rabbit" style="--a:#1e4fa3;--b:#d7262b"><i></i>White Rabbit</button>
+    <button class="sw" role="radio" data-brand="soymalt" style="--a:#7a4a2a;--b:#e8b33c"><i></i>Vita Soy Malt</button>
+    <button class="sw" role="radio" data-brand="vitasoy" style="--a:#2e7d4f;--b:#f5f0de"><i></i>Vita Soy</button>
+    <button class="sw" role="radio" data-brand="spicy" style="--a:#c8102e;--b:#ff9f1c"><i></i>Calbee Hot &amp; Spicy</button>
+  </div>
 
   <div class="notice" id="voiceNote" hidden></div>
   <div class="notice" id="dbNote" hidden></div>
@@ -289,6 +312,17 @@ function show(which){
 $("tab-cards").onclick=()=>show("cards"); $("tab-list").onclick=()=>show("list");
 try{tab=localStorage.getItem("tab")||"cards"}catch(_){}
 show(tab);
+
+/* ---------- colour themes ---------- */
+function setBrand(b){
+  if(!document.querySelector(`.sw[data-brand="${b}"]`)) b="jade";
+  if(b==="jade") delete document.body.dataset.brand; else document.body.dataset.brand=b;
+  document.querySelectorAll(".sw").forEach(s=>s.setAttribute("aria-checked",s.dataset.brand===b));
+  try{localStorage.setItem("brand",b)}catch(_){}
+}
+document.querySelectorAll(".sw").forEach(s=>s.onclick=()=>setBrand(s.dataset.brand));
+let savedBrand="jade"; try{savedBrand=localStorage.getItem("brand")||"jade"}catch(_){}
+setBrand(savedBrand);
 
 /* ---------- connect to the saved deck ---------- */
 function setEmpty(title,body){const el=$("emptyState");el.hidden=false;el.innerHTML=`<strong>${title}</strong>${body}`;}
